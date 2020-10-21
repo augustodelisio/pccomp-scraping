@@ -12,7 +12,7 @@ def abrirFavoritos():
     venFavoritos.transient(root)
     venFavoritos.grab_set()
 
-    # Creacion del marco del alta
+    ######## Ventana favoritos ########
     marcoFavoritos = Frame(venFavoritos)
     marcoFavoritos.pack()
     #marcoFavoritos.config(width="190", height="290")
@@ -23,7 +23,7 @@ def abrirFavoritos():
     marcoFavoritos.pack(padx=10, pady=(20, 20), side=TOP, anchor=CENTER)
 
 
-    ######## Creacion de la lista ########
+    ######## Creacion de la lista de favoritos ########
     marcoListaFavoritos = Frame(venFavoritos)
     marcoListaFavoritos.pack()
     marcoListaFavoritos.pack(padx=15, pady=(0, 10))
@@ -40,15 +40,19 @@ def abrirFavoritos():
     tablaFavoritos.pack()
 
 
-    ######## Creacion de botones ########
+    ######## Creacion de subtotal ########
     marcoCostoFavoritos = Frame(venFavoritos)
     marcoCostoFavoritos.pack(padx=12, pady=(10), anchor=CENTER)
     lblCosto = Label(marcoCostoFavoritos, text="Subtotal:")
     lblCosto.pack(padx=4, side=LEFT, anchor=W)
     subtotal = StringVar()
-    subtotal.set(sum([float(i) for i in tablaFavoritos[3]]))
-    entCosto = Entry(marcoCostoFavoritos, state="disabled", textvariable=subtotal.get())
-    entCosto.pack(padx=4, side=RIGHT, anchor=W)
+    sumatoria = 0
+    for i in tablaFavoritos.get_children():
+        sumatoria += tablaFavoritos.item(i)["values"][3]
+    subtotal.set(sumatoria)
+    lblSubtotal = Label(marcoCostoFavoritos, text="{}".format(subtotal.get()))
+    lblSubtotal.pack(padx=4, side=RIGHT, anchor=W)
+
 
 
 ######## Creacion del root ########
