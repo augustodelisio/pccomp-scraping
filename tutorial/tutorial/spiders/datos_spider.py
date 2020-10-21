@@ -169,3 +169,60 @@ class ComerosSpider(Spider):
             elif cat == "computacion-perifericos-teclados":
                 loader.add_value('categoria', 'Teclados')
             yield loader.load_item()#imprimir salida
+
+
+class MarstechSpider(Spider):
+    name = "Marstech"
+    start_urls = ['https://www.marstech.com.ar/listado/st=Perifericos;g=0;b=1;or=5;c=3;e=6;h=1;m=0;A_PAGENUMBER=1;cat_id=62;scat_id=3894;/GlobalBluePoint-ERP.aspx']
+    #start_urls = ['https://www.marstech.com.ar/listado/st=Perifericos;g=0;b=1;or=5;c=3;e=6;h=1;m=0;A_PAGENUMBER=1;cat_id=62;scat_id=3894;/GlobalBluePoint-ERP.aspx',
+    # https://www.marstech.com.ar/listado/st=Almacenamiento;g=0;b=1;or=5;c=3;e=6;h=1;m=0;A_PAGENUMBER=1;cat_id=51;scat_id=3863;/GlobalBluePoint-ERP.aspx,
+    # https://www.marstech.com.ar/listado/st=Almacenamiento;g=0;b=1;or=5;c=3;e=6;h=1;m=0;A_PAGENUMBER=1;cat_id=51;scat_id=3864;/GlobalBluePoint-ERP.aspx,
+    # https://www.marstech.com.ar/listado/st=Parlantes;g=0;b=1;or=5;c=3;e=6;h=1;m=0;A_PAGENUMBER=1;cat_id=62;scat_id=3897;/GlobalBluePoint-ERP.aspx,
+    # https://www.marstech.com.ar/listado/st=Mouse;g=0;b=1;or=5;c=3;e=6;h=1;m=0;A_PAGENUMBER=1;cat_id=62;scat_id=3893;/GlobalBluePoint-ERP.aspx,
+    # https://www.marstech.com.ar/listado/st=Perifericos;g=0;b=1;or=5;c=3;e=6;h=1;m=0;A_PAGENUMBER=1;cat_id=62;scat_id=3892;/GlobalBluePoint-ERP.aspx,
+    # https://www.marstech.com.ar/listado/st=Perifericos;g=0;b=1;or=5;c=3;e=6;h=1;m=0;A_PAGENUMBER=1;cat_id=62;scat_id=3895;/GlobalBluePoint-ERP.aspx,
+    # https://www.marstech.com.ar/listado/st=Almacenamiento;g=0;b=1;or=5;c=3;e=6;h=1;m=0;A_PAGENUMBER=1;cat_id=51;scat_id=3865;/GlobalBluePoint-ERP.aspx,
+    # https://www.marstech.com.ar/listado/st=Monitores%20y%20Proyectores;g=0;b=1;or=5;c=3;e=6;h=1;m=0;A_PAGENUMBER=1;cat_id=60;scat_id=3917;/GlobalBluePoint-ERP.aspx,
+    # https://www.marstech.com.ar/listado/st=Perifericos;g=0;b=1;or=5;c=3;e=6;h=1;m=172,199,293,179,180,173,209,235,277,178;A_PAGENUMBER=1;cat_id=62;scat_id=3894;/GlobalBluePoint-ERP.aspx,
+    # https://www.marstech.com.ar/listado/st=Estabilizadores%20Y%20Ups;g=0;b=1;or=5;c=3;e=6;h=1;m=0;A_PAGENUMBER=1;cat_id=46;scat_id=3832;/GlobalBluePoint-ERP.aspx]
+
+    def parse(self, response):
+        sel = Selector(response)
+        articulos = sel.xpath('//*[@id="divBody"]/div[3]/div/div[3]/div[2]/div')
+        #//*[@id="divBody"]/div[3]/div/div[3]/div[2]/div
+        #ITERAR SOBRE TODOS LOS ARTICULOS
+        for i, art in enumerate(articulos):
+            loader = ItemLoader(item=Articulo(), selector=art)
+
+            loader.add_xpath('nombre', './/div[1]/div/div/div/article/div/a/div[2]/p/text()')
+            loader.add_xpath('precio', './/div[1]/div/div/div/article/div/a/div[2]/h5/text()')
+
+            cat = response.url.split('/')[-2].split(';')[-2].split('scat_id=')[1]#devuelve num de categoria
+
+            loader.add_xpath('url', './/div[1]/div/div/div/article/div/a/@href')
+
+            if cat == "3865":
+                loader.add_value('categoria', 'Almacenamiento')
+            elif cat == "3864":
+                loader.add_value('categoria', 'Almacenamiento')
+            elif cat == "3863":
+                loader.add_value('categoria', 'Pendrives')
+            elif cat == "3917":
+                loader.add_value('categoria', 'Monitores')
+            elif cat == "3893":
+                loader.add_value('categoria', 'Mouses')
+            elif cat == "3897":
+                loader.add_value('categoria', 'Parlantes')
+            elif cat == "3892":
+                loader.add_value('categoria', 'Teclados')
+            elif cat == "3895":
+                loader.add_value('categoria', 'Webcams')
+            elif cat == "3832":
+                loader.add_value('categoria', 'Estabilizadores')
+            elif cat == "3894":
+                loader.add_value('categoria', 'Auriculares')
+            elif cat == "3896":
+                loader.add_value('categoria', 'Joysticks')
+            yield loader.load_item()#imprimir salida
+
+
