@@ -78,32 +78,46 @@ def borrarFavorito(tv, id_producto):
 def actualizaLista(tv, opc=False):
     if opc:
         productos = ArticulosBusiness().getArtsTable()
-        print(productos)
+        # print(productos)
         elementos = tv.get_children()
         for e in elementos:
             tv.delete(e)
-        for o in productos:
-            tv.insert('', END, values=(o[0], o[5], o[1], o[2], o[3], o[4]))
+        for a, c in productos:
+            tv.insert('', END, values=(a.id, c.nombre, a.nombre, a.precio, a.url))
     else:
         elementos = tv.get_children()
         for e in elementos:
             tv.delete(e)
-        for o in favoritos:
-            tv.insert('', END, values=(o[0], o[5], o[1], o[2], o[3], o[4]))
+        for a, c in favoritos:
+            tv.insert('', END, values=(a.id, c.nombre, a.nombre, a.precio, a.url))
 
 
 def ordenar_lista(tv, col, reverse):
-    l = [(tv.set(k, col), k) for k in tv.get_children('')]
-    l.sort(reverse=reverse)
-    # Reordenar items.
-    for index, (val, k) in enumerate(l):
-        tv.move(k, '', index)
-    # Ordenar al reves la proxima vez.
-    tv.heading(col, command=lambda _col=col: ordenar_lista(tv, _col, not reverse))
+    if col == 3 or col == 0:
+        l = [(tv.set(k, col), k) for k in tv.get_children('')]
+        try:
+            l.sort(key=lambda t: float(t[0]), reverse=reverse)
+        except:
+            l.sort(reverse=reverse)
+        for index, (val, k) in enumerate(l):
+            tv.move(k, '', index)
+        tv.heading(col, command=lambda _col=col: ordenar_lista(tv, col, not reverse))
+    else:
+        l = [(tv.set(k, col), k) for k in tv.get_children('')]
+        l.sort(reverse=reverse)
+        # Reordenar items.
+        for index, (val, k) in enumerate(l):
+            tv.move(k, '', index)
+        # Ordenar al reves la proxima vez.
+        tv.heading(col, command=lambda _col=col: ordenar_lista(tv, _col, not reverse))
+
 
 
 def buscarProducto(opc, texto):
-    pass
+    if opc == "Categoria":
+        articulos = lista.get_children()
+        print(articulos)
+
 
 
 def openweb(link):
@@ -113,8 +127,8 @@ def openweb(link):
 ######## Inicializacion ########
 header = ("ID", "Categoria", "Producto", "Precio", "")
 favoritos = []
-productos = [["1", "mouse", "logitech g502", "15000", "www.google.com"], ["2", "1", "4", "3", "www.google.com"],
-             ["3", "4", "2", "1", "www.google.com"], ["4", "3", "1", "2", "www.google.com"]]
+# productos = [["1", "mouse", "logitech g502", "15000", "www.google.com"], ["2", "1", "4", "3", "www.google.com"],
+#              ["3", "4", "2", "1", "www.google.com"], ["4", "3", "1", "2", "www.google.com"]]
 
 
 ######## Creacion del root ########
