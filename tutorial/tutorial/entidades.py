@@ -42,3 +42,15 @@ class Categoria(Base):
     id = Column(Integer, primary_key=True)
     nombre = Column('nombre', String(50))
     articulos = relationship('Articulo', backref='categorias')  # Una categoria tiene muchos articulos (1 a M)
+
+
+class TablaArticulo():
+    """
+    Entidad que contiene un articulo con categoria
+    """
+    def __init__(self, idArticulo, nombre, precio, url, categoria):
+        self.idArticulo = idArticulo
+        self.nombre = nombre
+        self.precio = precio
+        self.url = url
+        self.categoria = categoria

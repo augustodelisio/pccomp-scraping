@@ -1,6 +1,5 @@
 import webbrowser
-from Capa_datos import DatosProducto
-
+from tutorial.tutorial.entidades import Articulo, Categoria
 
 class NegocioProducto(object):
 
