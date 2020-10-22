@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import ttk
 import webbrowser
+from tkinter import messagebox
 
 
 def abrirFavoritos():
@@ -23,15 +24,13 @@ def abrirFavoritos():
     listaFavoritos.heading(1, text="Categoria", anchor=CENTER)
     listaFavoritos.heading(2, text="Producto", anchor=CENTER)
     listaFavoritos.heading(3, text="Precio", anchor=CENTER)
-    listaFavoritos.insert("", END, values=("1", "2", "3", "4"))
-    listaFavoritos.insert("", END, values=("2", "1", "4", "3"))
-    listaFavoritos.insert("", END, values=("3", "4", "2", "1"))
-    listaFavoritos.insert("", END, values=("4", "3", "1", "2"))
     listaFavoritos.column(0, width=40)
     listaFavoritos.column(1, width=150)
     listaFavoritos.column(2, width=400)
     listaFavoritos.column(3, width=140)
     listaFavoritos.column(4, width=0, stretch=NO, minwidth=0)
+    for f in favoritos:
+        listaFavoritos.insert('', END, values=(f[0], f[1], f[2], f[3], f[4]))
     listaFavoritos.pack()
     ######## Ordenar lista de favoritos por columna ########
     for col in (0, 1, 2, 3, 4):
@@ -41,9 +40,9 @@ def abrirFavoritos():
     ######## Creacion de botones de favoritos ########
     marcoBotonesFavoritos = Frame(venFavoritos)
     marcoBotonesFavoritos.pack(padx=12, pady=(10), anchor=CENTER)
-    btnLink = Button(marcoBotonesFavoritos, text="Ver en la web", width=13, command=lambda: openweb(listaFavoritos.selection()[4]))
+    btnLink = Button(marcoBotonesFavoritos, text="Ver en la web", width=13, command=lambda: openweb(listaFavoritos.item(listaFavoritos.focus())['values'][4]))
     btnLink.pack(padx=4, side=LEFT, anchor=W)
-    btnFav = Button(marcoBotonesFavoritos, text="Borrar de favoritos", width=16, command=lambda: borrarFavorito(listaFavoritos.selection()[0]))
+    btnFav = Button(marcoBotonesFavoritos, text="Borrar de favoritos", width=16, command=lambda: borrarFavorito(listaFavoritos, listaFavoritos.item(listaFavoritos.focus())['values'][0]))
     btnFav.pack(padx=4, side=LEFT, anchor=W)
 
 
@@ -59,6 +58,28 @@ def abrirFavoritos():
     lblCosto.pack(side=RIGHT, anchor=W)
 
 
+def agregarFavorito(producto):
+    if producto in favoritos:
+        messagebox.showerror(title="Error", message="El producto ya se encuentra en Favoritos.")
+    else:
+        favoritos.append(producto)
+
+
+def borrarFavorito(tv, id_producto):
+    for i in favoritos:
+        if i[0] == id_producto:
+            favoritos.remove(i)
+    actualizaLista(tv, favoritos)
+
+
+def actualizaLista(tv, objetos):
+    elementos = tv.get_children()
+    for e in elementos:
+        tv.delete(e)
+    for o in objetos:
+        tv.insert('', END, values=(o[0], o[1], o[2], o[3], o[4]))
+
+
 def ordenar_lista(tv, col, reverse):
     l = [(tv.set(k, col), k) for k in tv.get_children('')]
     l.sort(reverse=reverse)
@@ -71,8 +92,10 @@ def ordenar_lista(tv, col, reverse):
     tv.heading(col, command=lambda _col=col: ordenar_lista(tv, _col, not reverse))
 
 
+
 ######## Inicializacion ########
 header = ("ID", "Categoria", "Producto", "Precio", "")
+favoritos = []
 
 
 ######## Creacion del root ########
@@ -113,10 +136,10 @@ lista.column(1, width=200)
 lista.column(2, width=550)
 lista.column(3, width=140)
 lista.column(4, width=0, stretch=NO, minwidth=0)
-lista.insert("", END, values=("1", "2", "3", "4", "www.google....."))
-lista.insert("", END, values=("2", "1", "4", "3"))
-lista.insert("", END, values=("3", "4", "2", "1"))
-lista.insert("", END, values=("4", "3", "1", "2"))
+lista.insert("", END, values=("1", "2", "3", "4", "www.google.com"))
+lista.insert("", END, values=("2", "1", "4", "3", "www.google.com"))
+lista.insert("", END, values=("3", "4", "2", "1", "www.google.com"))
+lista.insert("", END, values=("4", "3", "1", "2", "www.google.com"))
 lista.pack()
 
 ######## Ordenar lista por columnas ########
@@ -127,9 +150,9 @@ for col in (0, 1, 2, 3, 4):
 ######## Creacion de botones ########
 marcoBotones = Frame(root)
 marcoBotones.pack(padx=12, pady=(10), anchor=CENTER)
-btnLink = Button(marcoBotones, text="Ver en la web", width=13, command=lambda: openweb(lista.selection()[4]))
+btnLink = Button(marcoBotones, text="Ver en la web", width=13, command=lambda: openweb(lista.item(lista.focus())['values'][4]))
 btnLink.pack(padx=4, side=LEFT, anchor=W)
-btnFav = Button(marcoBotones, text="Añadir a favoritos", width=16, command=lambda: agregarFavorito(lista.selection()[0]))
+btnFav = Button(marcoBotones, text="Añadir a favoritos", width=16, command=lambda: agregarFavorito(lista.item(lista.focus())['values']))
 btnFav.pack(padx=4, side=LEFT, anchor=W)
 
 
