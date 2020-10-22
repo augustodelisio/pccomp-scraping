@@ -1,15 +1,10 @@
-import webbrowser
-from tutorial.tutorial.entidades import Articulo, Categoria, TablaArticulo
-from tutorial.Capa_datos import ArticulosData
+from tutorial.entidades import Articulo, Categoria, TablaArticulo
+from Capa_datos import ArticulosData
 
 class ArticulosBusiness(object):
 
     def __init__(self):
         self.articulos = ArticulosData()
-
-
-    def openweb(link):
-        webbrowser.open(link, new=1)
 
 
     def getArtById(self, artId):

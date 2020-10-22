@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import ttk
 import webbrowser
 from tkinter import messagebox
+from Capa_negocio import ArticulosBusiness
 
 
 def abrirFavoritos():
@@ -32,6 +33,8 @@ def abrirFavoritos():
     for f in favoritos:
         listaFavoritos.insert('', END, values=(f[0], f[1], f[2], f[3], f[4]))
     listaFavoritos.pack()
+
+
     ######## Ordenar lista de favoritos por columna ########
     for col in (0, 1, 2, 3, 4):
         listaFavoritos.heading(col, text=header[col], command=lambda _col=col: ordenar_lista(listaFavoritos, _col, False))
@@ -69,33 +72,48 @@ def borrarFavorito(tv, id_producto):
     for i in favoritos:
         if i[0] == id_producto:
             favoritos.remove(i)
-    actualizaLista(tv, favoritos)
+    actualizaLista(tv)
 
 
-def actualizaLista(tv, objetos):
-    elementos = tv.get_children()
-    for e in elementos:
-        tv.delete(e)
-    for o in objetos:
-        tv.insert('', END, values=(o[0], o[1], o[2], o[3], o[4]))
+def actualizaLista(tv, opc=False):
+    if opc:
+        productos = ArticulosBusiness().getArtsTable()
+        elementos = tv.get_children()
+        for e in elementos:
+            tv.delete(e)
+        for o in productos:
+            tv.insert('', END, values=(o[0], o[1], o[2], o[3], o[4]))
+    else:
+        elementos = tv.get_children()
+        for e in elementos:
+            tv.delete(e)
+        for o in productos:
+            tv.insert('', END, values=(o[0], o[1], o[2], o[3], o[4]))
 
 
 def ordenar_lista(tv, col, reverse):
     l = [(tv.set(k, col), k) for k in tv.get_children('')]
     l.sort(reverse=reverse)
-
-    # rearrange items in sorted positions
+    # Reordenar items.
     for index, (val, k) in enumerate(l):
         tv.move(k, '', index)
-
-    # reverse sort next time
+    # Ordenar al reves la proxima vez.
     tv.heading(col, command=lambda _col=col: ordenar_lista(tv, _col, not reverse))
 
+
+def buscarProducto(opc, texto):
+    pass
+
+
+def openweb(link):
+    webbrowser.open(link, new=1)
 
 
 ######## Inicializacion ########
 header = ("ID", "Categoria", "Producto", "Precio", "")
 favoritos = []
+productos = [["1", "mouse", "logitech g502", "15000", "www.google.com"], ["2", "1", "4", "3", "www.google.com"],
+             ["3", "4", "2", "1", "www.google.com"], ["4", "3", "1", "2", "www.google.com"]]
 
 
 ######## Creacion del root ########
@@ -136,11 +154,8 @@ lista.column(1, width=200)
 lista.column(2, width=550)
 lista.column(3, width=140)
 lista.column(4, width=0, stretch=NO, minwidth=0)
-lista.insert("", END, values=("1", "2", "3", "4", "www.google.com"))
-lista.insert("", END, values=("2", "1", "4", "3", "www.google.com"))
-lista.insert("", END, values=("3", "4", "2", "1", "www.google.com"))
-lista.insert("", END, values=("4", "3", "1", "2", "www.google.com"))
 lista.pack()
+
 
 ######## Ordenar lista por columnas ########
 for col in (0, 1, 2, 3, 4):
@@ -152,6 +167,8 @@ marcoBotones = Frame(root)
 marcoBotones.pack(padx=12, pady=(10), anchor=CENTER)
 btnLink = Button(marcoBotones, text="Ver en la web", width=13, command=lambda: openweb(lista.item(lista.focus())['values'][4]))
 btnLink.pack(padx=4, side=LEFT, anchor=W)
+btnRefresh = Button(marcoBotones, text="Actualizar", width=10, command=lambda: actualizaLista(lista, True))
+btnRefresh.pack(padx=4, side=LEFT, anchor=W)
 btnFav = Button(marcoBotones, text="Añadir a favoritos", width=16, command=lambda: agregarFavorito(lista.item(lista.focus())['values']))
 btnFav.pack(padx=4, side=LEFT, anchor=W)
 

@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from tutorial.tutorial.entidades import Base, Categoria, Articulo
+from tutorial.entidades import Base, Categoria, Articulo
 
 
 class ArticulosData(object):
