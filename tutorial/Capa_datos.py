@@ -47,7 +47,7 @@ class ArticulosData(object):
             return None
 
 
-    def getArtsTable(self, nom):
+    def getArtsTable(self):
         """
         Devuelve un articulo, dado su id.
         Devuelve None si no encuentra nada.
@@ -62,3 +62,5 @@ class ArticulosData(object):
             return articulos
         except:
             return None
+
+
