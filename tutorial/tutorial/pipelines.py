@@ -8,6 +8,7 @@ from sqlalchemy.orm import sessionmaker
 from scrapy.exceptions import DropItem
 from .entidades import Articulo, Categoria, db_connect, create_table
 import logging
+from string import capwords
 
 """class TutorialPipeline(object):
     def process_item(self, item, spider):
@@ -30,7 +31,7 @@ class GuardarArticulosPipeline(object):
         """
         session = self.Session()
         articulo = Articulo()
-        articulo.nombre = item["nombre"][0]
+        articulo.nombre = capwords(item["nombre"][0])
         articulo.precio = item["precio"][0]
         articulo.url = item["url"][0]
         articulo.categoria = item["categoria"][0]
@@ -68,14 +69,14 @@ class DuplicadosPipeline(object):
     def process_item(self, item, spider):
         cambios = False
         session = self.Session()
-        art = session.query(Articulo).filter_by(nombre=item["nombre"][0]).first()
+        art = session.query(Articulo).filter_by(nombre=capwords(item["nombre"][0])).first()
         if art is not None:  # the current quote exists
             if art.precio != item["precio"][0] or art.url != item["url"][0]:
                 art.precio = item["precio"][0]
                 art.url = item["url"][0]
                 cambios = True
 
-            cat = session.query(Categoria).filter_by(nombre=item["categoria"][0]).first()
+            cat = session.query(Categoria).filter_by(nombre=capwords(item["categoria"][0])).first()
             if cat is not None:
                 if art.categoria != cat.id:
                     art.categoria = cat.id

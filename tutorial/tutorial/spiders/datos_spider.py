@@ -5,6 +5,7 @@ from scrapy.loader import ItemLoader
 from ..items import Articulo
 from scrapy.spiders import Spider
 from scrapy.selector import Selector
+from string import capwords
 from scrapy.crawler import CrawlerProcess
 from scrapy.utils.project import get_project_settings
 from subprocess import call, run, Popen
@@ -26,7 +27,10 @@ class StarComputacionSpider(Spider):
             loader = ItemLoader(item=Articulo(), selector=art)
 
             loader.add_xpath('nombre', './/div/h3/a/text()')
-            loader.add_xpath('precio', './/div/a/text()')
+            #loader.add_xpath('precio', './/div/a/text()')
+            precio = loader.get_xpath('.//div/a/text()')[0]
+            precio = precio.split('AR$')[-1].strip()
+            loader.add_value('precio', precio)
 
             cat = response.url.split("/")[-2]
             finalUrl = loader.get_xpath('.//a/@href')
@@ -71,7 +75,15 @@ class BigPointSpider(Spider):
             loader = ItemLoader(item=Articulo(), selector=art)
 
             loader.add_xpath('nombre', './/div/div/div[1]/a/h2/text()')
-            loader.add_xpath('precio', './/div/div/div[3]/div[1]/span/span/ins/span/text()')
+            #loader.add_xpath('precio', './/div/div/div[3]/div[1]/span/span/ins/span/text()')
+            pre = loader.get_xpath('.//div/div/div[3]/div[1]/span/span/ins/span/text()')[0]
+            pre = pre.split(',')
+            precio = ""
+            for i in pre:
+                precio += str(i) + ""
+            precio = precio[:-1]
+            precio = precio.strip()
+            loader.add_value('precio', precio)
 
             cat = response.url.split("/")[-2]
             loader.add_xpath('url', './/div/div/div[1]/a/@href')
@@ -109,7 +121,10 @@ class BigPointSpider(Spider):
 
 class ComerosSpider(Spider):
     name = "Comeros"
-    start_urls = ['https://www.comeros.com.ar/categoria-producto/memorias/', 'https://www.comeros.com.ar/categoria-producto/partes-de-pc/computacion-gabinetes/']
+    start_urls = ['https://www.comeros.com.ar/categoria-producto/memorias/',
+                  'https://www.comeros.com.ar/categoria-producto/partes-de-pc/computacion-gabinetes/',
+                  'https://www.comeros.com.ar/categoria-producto/partes-de-pc/placas-de-video/',
+                  'https://www.comeros.com.ar/categoria-producto/perifericos/computacion-perifericos-auriculares/']
 
     def parse(self, response):
         sel = Selector(response)
@@ -119,10 +134,12 @@ class ComerosSpider(Spider):
         for i, art in enumerate(articulos):
             loader = ItemLoader(item=Articulo(), selector=art)
 
-            #nom = loader.get_xpath('.//div/div[3]/h3/text()')[0].strip()
-            #if nom != "Listado de sucursales OCA para retiro del producto":
+            nom = loader.get_xpath('.//div/div[3]/h3/text()')[0].strip()
+            if nom == "Listado de sucursales OCA para retiro del producto":
+                break
 
-            loader.add_xpath('nombre', './/div/div[3]/h3/text()')
+            #loader.add_xpath('nombre', './/div/div[3]/h3/text()')
+            loader.add_value('nombre', nom)
             loader.add_xpath('precio', './/div/div[2]/p/span/text()')
 
             cat = response.url.split("/")[-2]
@@ -173,33 +190,37 @@ class ComerosSpider(Spider):
 
 class MarstechSpider(Spider):
     name = "Marstech"
-    start_urls = ['https://www.marstech.com.ar/listado/st=Perifericos;g=0;b=1;or=5;c=3;e=6;h=1;m=0;A_PAGENUMBER=1;cat_id=62;scat_id=3894;/GlobalBluePoint-ERP.aspx']
-    #start_urls = ['https://www.marstech.com.ar/listado/st=Perifericos;g=0;b=1;or=5;c=3;e=6;h=1;m=0;A_PAGENUMBER=1;cat_id=62;scat_id=3894;/GlobalBluePoint-ERP.aspx',
-    # https://www.marstech.com.ar/listado/st=Almacenamiento;g=0;b=1;or=5;c=3;e=6;h=1;m=0;A_PAGENUMBER=1;cat_id=51;scat_id=3863;/GlobalBluePoint-ERP.aspx,
-    # https://www.marstech.com.ar/listado/st=Almacenamiento;g=0;b=1;or=5;c=3;e=6;h=1;m=0;A_PAGENUMBER=1;cat_id=51;scat_id=3864;/GlobalBluePoint-ERP.aspx,
-    # https://www.marstech.com.ar/listado/st=Parlantes;g=0;b=1;or=5;c=3;e=6;h=1;m=0;A_PAGENUMBER=1;cat_id=62;scat_id=3897;/GlobalBluePoint-ERP.aspx,
-    # https://www.marstech.com.ar/listado/st=Mouse;g=0;b=1;or=5;c=3;e=6;h=1;m=0;A_PAGENUMBER=1;cat_id=62;scat_id=3893;/GlobalBluePoint-ERP.aspx,
-    # https://www.marstech.com.ar/listado/st=Perifericos;g=0;b=1;or=5;c=3;e=6;h=1;m=0;A_PAGENUMBER=1;cat_id=62;scat_id=3892;/GlobalBluePoint-ERP.aspx,
-    # https://www.marstech.com.ar/listado/st=Perifericos;g=0;b=1;or=5;c=3;e=6;h=1;m=0;A_PAGENUMBER=1;cat_id=62;scat_id=3895;/GlobalBluePoint-ERP.aspx,
-    # https://www.marstech.com.ar/listado/st=Almacenamiento;g=0;b=1;or=5;c=3;e=6;h=1;m=0;A_PAGENUMBER=1;cat_id=51;scat_id=3865;/GlobalBluePoint-ERP.aspx,
-    # https://www.marstech.com.ar/listado/st=Monitores%20y%20Proyectores;g=0;b=1;or=5;c=3;e=6;h=1;m=0;A_PAGENUMBER=1;cat_id=60;scat_id=3917;/GlobalBluePoint-ERP.aspx,
-    # https://www.marstech.com.ar/listado/st=Perifericos;g=0;b=1;or=5;c=3;e=6;h=1;m=172,199,293,179,180,173,209,235,277,178;A_PAGENUMBER=1;cat_id=62;scat_id=3894;/GlobalBluePoint-ERP.aspx,
-    # https://www.marstech.com.ar/listado/st=Estabilizadores%20Y%20Ups;g=0;b=1;or=5;c=3;e=6;h=1;m=0;A_PAGENUMBER=1;cat_id=46;scat_id=3832;/GlobalBluePoint-ERP.aspx]
+    start_urls = ['https://www.marstech.com.ar/listado/st=Perifericos;g=0;b=1;or=5;c=3;e=6;h=1;m=0;A_PAGENUMBER=1;cat_id=62;scat_id=3894;/GlobalBluePoint-ERP.aspx',
+    'https://www.marstech.com.ar/listado/st=Perifericos;g=0;b=1;or=5;c=3;e=6;h=1;m=0;A_PAGENUMBER=1;cat_id=62;scat_id=3892;/GlobalBluePoint-ERP.aspx']
+
+    # start_urls = ['https://www.marstech.com.ar/listado/st=Perifericos;g=0;b=1;or=5;c=3;e=6;h=1;m=0;A_PAGENUMBER=1;cat_id=62;scat_id=3894;/GlobalBluePoint-ERP.aspx',
+    # 'https://www.marstech.com.ar/listado/st=Almacenamiento;g=0;b=1;or=5;c=3;e=6;h=1;m=0;A_PAGENUMBER=1;cat_id=51;scat_id=3863;/GlobalBluePoint-ERP.aspx',
+    # 'https://www.marstech.com.ar/listado/st=Almacenamiento;g=0;b=1;or=5;c=3;e=6;h=1;m=0;A_PAGENUMBER=1;cat_id=51;scat_id=3864;/GlobalBluePoint-ERP.aspx',
+    # 'https://www.marstech.com.ar/listado/st=Parlantes;g=0;b=1;or=5;c=3;e=6;h=1;m=0;A_PAGENUMBER=1;cat_id=62;scat_id=3897;/GlobalBluePoint-ERP.aspx',
+    # 'https://www.marstech.com.ar/listado/st=Mouse;g=0;b=1;or=5;c=3;e=6;h=1;m=0;A_PAGENUMBER=1;cat_id=62;scat_id=3893;/GlobalBluePoint-ERP.aspx',
+    # 'https://www.marstech.com.ar/listado/st=Perifericos;g=0;b=1;or=5;c=3;e=6;h=1;m=0;A_PAGENUMBER=1;cat_id=62;scat_id=3892;/GlobalBluePoint-ERP.aspx',
+    # 'https://www.marstech.com.ar/listado/st=Perifericos;g=0;b=1;or=5;c=3;e=6;h=1;m=0;A_PAGENUMBER=1;cat_id=62;scat_id=3895;/GlobalBluePoint-ERP.aspx',
+    # 'https://www.marstech.com.ar/listado/st=Almacenamiento;g=0;b=1;or=5;c=3;e=6;h=1;m=0;A_PAGENUMBER=1;cat_id=51;scat_id=3865;/GlobalBluePoint-ERP.aspx',
+    # 'https://www.marstech.com.ar/listado/st=Monitores%20y%20Proyectores;g=0;b=1;or=5;c=3;e=6;h=1;m=0;A_PAGENUMBER=1;cat_id=60;scat_id=3917;/GlobalBluePoint-ERP.aspx',
+    # 'https://www.marstech.com.ar/listado/st=Perifericos;g=0;b=1;or=5;c=3;e=6;h=1;m=172,199,293,179,180,173,209,235,277,178;A_PAGENUMBER=1;cat_id=62;scat_id=3894;/GlobalBluePoint-ERP.aspx',
+    # 'https://www.marstech.com.ar/listado/st=Estabilizadores%20Y%20Ups;g=0;b=1;or=5;c=3;e=6;h=1;m=0;A_PAGENUMBER=1;cat_id=46;scat_id=3832;/GlobalBluePoint-ERP.aspx']
 
     def parse(self, response):
         sel = Selector(response)
-        articulos = sel.xpath('//*[@id="divBody"]/div[3]/div/div[3]/div[2]/div')
+        articulos = sel.xpath('//*[@id="divBody"]/div[3]/div/div[3]/div[2]/div/div')
         #//*[@id="divBody"]/div[3]/div/div[3]/div[2]/div
         #ITERAR SOBRE TODOS LOS ARTICULOS
         for i, art in enumerate(articulos):
             loader = ItemLoader(item=Articulo(), selector=art)
 
-            loader.add_xpath('nombre', './/div[1]/div/div/div/article/div/a/div[2]/p/text()')
-            loader.add_xpath('precio', './/div[1]/div/div/div/article/div/a/div[2]/h5/text()')
+            loader.add_xpath('nombre', './/div/div/div/article/div/a/div[2]/p/text()')
+            precio = loader.get_xpath('.//div/div/div/article/div/a/div[2]/h5/text()')[0]
+            precio = precio.split('ARS')[-1].strip()
+            loader.add_value('precio', precio)
 
             cat = response.url.split('/')[-2].split(';')[-2].split('scat_id=')[1]#devuelve num de categoria
 
-            loader.add_xpath('url', './/div[1]/div/div/div/article/div/a/@href')
+            loader.add_xpath('url', './/div/div/div/article/div/a/@href')
 
             if cat == "3865":
                 loader.add_value('categoria', 'Almacenamiento')

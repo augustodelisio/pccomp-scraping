@@ -5,9 +5,10 @@ from scrapy.utils.project import get_project_settings
 process = CrawlerProcess(get_project_settings())
 
 # 'followall' is the name of one of the spiders of the project.
-#process.crawl('StarComputacion')
-#process.crawl('BigPoint')
+process.crawl('StarComputacion')
+process.crawl('BigPoint')
 process.crawl('Comeros')
+process.crawl('Marstech')
 process.start()# the script will block here until the crawling is finished
 
 
