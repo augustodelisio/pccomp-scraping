@@ -1,5 +1,5 @@
-from tutorial.entidades import Articulo, Categoria, TablaArticulo
-from Capa_datos import ArticulosData
+from tutorial.tutorial.entidades import Articulo, Categoria, TablaArticulo
+from tutorial.Capa_datos import ArticulosData
 
 class ArticulosBusiness(object):
 

@@ -78,17 +78,18 @@ def borrarFavorito(tv, id_producto):
 def actualizaLista(tv, opc=False):
     if opc:
         productos = ArticulosBusiness().getArtsTable()
+        print(productos)
         elementos = tv.get_children()
         for e in elementos:
             tv.delete(e)
         for o in productos:
-            tv.insert('', END, values=(o[0], o[1], o[2], o[3], o[4]))
+            tv.insert('', END, values=(o[0], o[5], o[1], o[2], o[3], o[4]))
     else:
         elementos = tv.get_children()
         for e in elementos:
             tv.delete(e)
-        for o in productos:
-            tv.insert('', END, values=(o[0], o[1], o[2], o[3], o[4]))
+        for o in favoritos:
+            tv.insert('', END, values=(o[0], o[5], o[1], o[2], o[3], o[4]))
 
 
 def ordenar_lista(tv, col, reverse):

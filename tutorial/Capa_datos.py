@@ -1,12 +1,12 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from tutorial.entidades import Base, Categoria, Articulo
+from tutorial.tutorial.entidades import Base, Categoria, Articulo
 
 
 class ArticulosData(object):
 
     def __init__(self):
-        engine = create_engine('sqlite:///scrapy_datos.db', echo=True)
+        engine = create_engine('sqlite:///tutorial/scrapy_datos.db', echo=True)
         Base.metadata.create_all(engine)
         Base.metadata.bind = engine
         db_session = sessionmaker()
