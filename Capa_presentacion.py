@@ -55,8 +55,11 @@ def abrirFavoritos():
     subtotal = StringVar()
     sumatoria = 0
     for i in listaFavoritos.get_children():
-        sumatoria += listaFavoritos.item(i)["values"][3]
-    subtotal.set(sumatoria)
+        try:
+            sumatoria += float(listaFavoritos.item(i)["values"][3])
+        except:
+            continue
+    subtotal.set("{0:.2f}".format(sumatoria))
     lblCosto = Label(marcoBotonesFavoritos, text="{}".format(subtotal.get()))
     lblCosto.pack(side=RIGHT, anchor=W)
 
@@ -78,7 +81,6 @@ def borrarFavorito(tv, id_producto):
 def actualizaLista(tv, opc=False):
     if opc:
         productos = ArticulosBusiness().getArtsTable()
-        # print(productos)
         elementos = tv.get_children()
         for e in elementos:
             tv.delete(e)
@@ -88,8 +90,8 @@ def actualizaLista(tv, opc=False):
         elementos = tv.get_children()
         for e in elementos:
             tv.delete(e)
-        for a, c in favoritos:
-            tv.insert('', END, values=(a.id, c.nombre, a.nombre, a.precio, a.url))
+        for i in favoritos:
+            tv.insert('', END, values=(i[0], i[1], i[2], i[3], i[4]))
 
 
 def ordenar_lista(tv, col, reverse):
@@ -112,12 +114,21 @@ def ordenar_lista(tv, col, reverse):
         tv.heading(col, command=lambda _col=col: ordenar_lista(tv, _col, not reverse))
 
 
-
 def buscarProducto(opc, texto):
+    articulos_seleccionados = []
+    actualizaLista(lista, True)
     if opc == "Categoria":
-        articulos = lista.get_children()
-        print(articulos)
-
+        for i in lista.get_children():
+            if texto in lista.item(i)["values"][1].lower():
+                articulos_seleccionados.append(lista.item(i)["values"])
+    else:
+        for i in lista.get_children():
+            if texto in lista.item(i)["values"][2].lower():
+                articulos_seleccionados.append(lista.item(i)["values"])
+    for i in lista.get_children():
+        lista.delete(i)
+    for i in articulos_seleccionados:
+        lista.insert('', END, values=(i[0], i[1], i[2], i[3], i[4]))
 
 
 def openweb(link):
@@ -127,8 +138,7 @@ def openweb(link):
 ######## Inicializacion ########
 header = ("ID", "Categoria", "Producto", "Precio", "")
 favoritos = []
-# productos = [["1", "mouse", "logitech g502", "15000", "www.google.com"], ["2", "1", "4", "3", "www.google.com"],
-#              ["3", "4", "2", "1", "www.google.com"], ["4", "3", "1", "2", "www.google.com"]]
+articulos_existentes = []
 
 
 ######## Creacion del root ########
@@ -187,6 +197,6 @@ btnRefresh.pack(padx=4, side=LEFT, anchor=W)
 btnFav = Button(marcoBotones, text="Añadir a favoritos", width=16, command=lambda: agregarFavorito(lista.item(lista.focus())['values']))
 btnFav.pack(padx=4, side=LEFT, anchor=W)
 
-
+actualizaLista(lista, True)
 
 root.mainloop()
