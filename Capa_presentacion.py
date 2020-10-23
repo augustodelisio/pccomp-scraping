@@ -20,6 +20,8 @@ def abrirFavoritos():
     marcoListaFavoritos = Frame(venFavoritos)
     marcoListaFavoritos.pack()
     marcoListaFavoritos.pack(padx=15, pady=(30, 10))
+    scrollbarFavoritos = Scrollbar(marcoListaFavoritos, orient ="vertical")
+    scrollbarFavoritos.pack(side=RIGHT, fill="y")
     listaFavoritos = ttk.Treeview(marcoListaFavoritos, height=11, columns=(0, 1, 2, 3, 4), show="headings")
     listaFavoritos.heading(0, text="ID", anchor=CENTER)
     listaFavoritos.heading(1, text="Categoria", anchor=CENTER)
@@ -33,6 +35,8 @@ def abrirFavoritos():
     for f in favoritos:
         listaFavoritos.insert('', END, values=(f[0], f[1], f[2], f[3], f[4]))
     listaFavoritos.pack()
+    scrollbarFavoritos.config(command = listaFavoritos.yview)
+    listaFavoritos.configure(yscrollcommand=scrollbarFavoritos.set)
 
 
     ######## Ordenar lista de favoritos por columna ########
@@ -70,7 +74,7 @@ def actualizaSubtotal(tv, marco, lbl):
     subtotal.set("{0:.2f}".format(sumatoria))
     lbl["text"] = "{}".format(subtotal.get())
 
-def agregarFavorito(producto):
+def agregarFavorito(producto, marco):
     if producto in favoritos:
         messagebox.showerror(title="Error", message="El producto ya se encuentra en Favoritos.")
     else:
@@ -163,6 +167,7 @@ btnFavoritos.pack(padx=10, side=RIGHT, anchor=W)
 desplegable = ttk.Combobox(marcoBuscador, state="readonly", width=20)
 desplegable.pack(padx=4, side=LEFT, anchor=W)
 desplegable["values"] = ["Producto", "Categoria"]
+desplegable.current(0)
 buscador = Entry(marcoBuscador, width=50)
 buscador.pack(padx=4, side=LEFT, anchor=W)
 btnBuscar = Button(marcoBuscador, text="Buscar", width=6, command=lambda: buscarProducto(desplegable.get(), buscador.get()))
@@ -173,6 +178,8 @@ btnBuscar.pack(padx=10, side=RIGHT, anchor=W)
 marcoLista = Frame(root)
 marcoLista.pack()
 marcoLista.pack(padx=15, pady=(0, 10))
+scrollbar = Scrollbar(marcoLista)
+scrollbar.pack(side=RIGHT, fill=Y)
 style = ttk.Style()
 style.configure("Treeview", highlightthickness=0, bd=0, font=('Calibri', 11)) # Modify the font of the body
 style.configure("Treeview.Heading", font=('Calibri', 13,'bold')) # Modify the font of the headings
@@ -187,7 +194,8 @@ lista.column(2, width=550)
 lista.column(3, width=140)
 lista.column(4, width=0, stretch=NO, minwidth=0)
 lista.pack()
-
+scrollbar.config(command = lista.yview)
+lista.configure(yscrollcommand=scrollbar.set)
 
 ######## Ordenar lista por columnas ########
 for col in (0, 1, 2, 3, 4):
@@ -201,9 +209,8 @@ btnLink = Button(marcoBotones, text="Ver en la web", width=13, command=lambda: o
 btnLink.pack(padx=4, side=LEFT, anchor=W)
 btnRefresh = Button(marcoBotones, text="Actualizar", width=10, command=lambda: actualizaLista(lista, True))
 btnRefresh.pack(padx=4, side=LEFT, anchor=W)
-btnFav = Button(marcoBotones, text="Añadir a favoritos", width=16, command=lambda: agregarFavorito(lista.item(lista.focus())['values']))
+btnFav = Button(marcoBotones, text="Añadir a favoritos", width=16, command=lambda: agregarFavorito(lista.item(lista.focus())['values'], marcoBotones))
 btnFav.pack(padx=4, side=LEFT, anchor=W)
-
 actualizaLista(lista, True)
 
 root.mainloop()
