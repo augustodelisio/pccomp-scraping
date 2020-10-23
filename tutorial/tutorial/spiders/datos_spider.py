@@ -14,9 +14,8 @@ from subprocess import call, run, Popen
 
 class StarComputacionSpider(Spider):
     name = "StarComputacion"
-    start_urls = ['http://www.starcomputacion.com.ar/monitores-23/']
-    #start_urls = ['http://www.starcomputacion.com.ar/monitores-23/', 'http://www.starcomputacion.com.ar/teclados-45/',
-    #              'http://www.starcomputacion.com.ar/discos-rigidos-67/']
+    start_urls = ['http://www.starcomputacion.com.ar/monitores-23/', 'http://www.starcomputacion.com.ar/teclados-45/',
+                 'http://www.starcomputacion.com.ar/discos-rigidos-67/']
 
     def parse(self, response):
         sel = Selector(response)
@@ -64,7 +63,9 @@ class StarComputacionSpider(Spider):
 
 class BigPointSpider(Spider):
     name = "BigPoint"
-    start_urls = ['https://bigpoint.com.ar/procesadores/']
+    start_urls = ['https://bigpoint.com.ar/procesadores/', 'https://bigpoint.com.ar/motherboards/',
+                  'https://bigpoint.com.ar/memorias/', 'https://bigpoint.com.ar/almacenamiento/',
+                  'https://bigpoint.com.ar/impresoras/']
 
     def parse(self, response):
         sel = Selector(response)
@@ -190,20 +191,20 @@ class ComerosSpider(Spider):
 
 class MarstechSpider(Spider):
     name = "Marstech"
-    start_urls = ['https://www.marstech.com.ar/listado/st=Perifericos;g=0;b=1;or=5;c=3;e=6;h=1;m=0;A_PAGENUMBER=1;cat_id=62;scat_id=3894;/GlobalBluePoint-ERP.aspx',
-    'https://www.marstech.com.ar/listado/st=Perifericos;g=0;b=1;or=5;c=3;e=6;h=1;m=0;A_PAGENUMBER=1;cat_id=62;scat_id=3892;/GlobalBluePoint-ERP.aspx']
-
     # start_urls = ['https://www.marstech.com.ar/listado/st=Perifericos;g=0;b=1;or=5;c=3;e=6;h=1;m=0;A_PAGENUMBER=1;cat_id=62;scat_id=3894;/GlobalBluePoint-ERP.aspx',
-    # 'https://www.marstech.com.ar/listado/st=Almacenamiento;g=0;b=1;or=5;c=3;e=6;h=1;m=0;A_PAGENUMBER=1;cat_id=51;scat_id=3863;/GlobalBluePoint-ERP.aspx',
-    # 'https://www.marstech.com.ar/listado/st=Almacenamiento;g=0;b=1;or=5;c=3;e=6;h=1;m=0;A_PAGENUMBER=1;cat_id=51;scat_id=3864;/GlobalBluePoint-ERP.aspx',
-    # 'https://www.marstech.com.ar/listado/st=Parlantes;g=0;b=1;or=5;c=3;e=6;h=1;m=0;A_PAGENUMBER=1;cat_id=62;scat_id=3897;/GlobalBluePoint-ERP.aspx',
-    # 'https://www.marstech.com.ar/listado/st=Mouse;g=0;b=1;or=5;c=3;e=6;h=1;m=0;A_PAGENUMBER=1;cat_id=62;scat_id=3893;/GlobalBluePoint-ERP.aspx',
-    # 'https://www.marstech.com.ar/listado/st=Perifericos;g=0;b=1;or=5;c=3;e=6;h=1;m=0;A_PAGENUMBER=1;cat_id=62;scat_id=3892;/GlobalBluePoint-ERP.aspx',
-    # 'https://www.marstech.com.ar/listado/st=Perifericos;g=0;b=1;or=5;c=3;e=6;h=1;m=0;A_PAGENUMBER=1;cat_id=62;scat_id=3895;/GlobalBluePoint-ERP.aspx',
-    # 'https://www.marstech.com.ar/listado/st=Almacenamiento;g=0;b=1;or=5;c=3;e=6;h=1;m=0;A_PAGENUMBER=1;cat_id=51;scat_id=3865;/GlobalBluePoint-ERP.aspx',
-    # 'https://www.marstech.com.ar/listado/st=Monitores%20y%20Proyectores;g=0;b=1;or=5;c=3;e=6;h=1;m=0;A_PAGENUMBER=1;cat_id=60;scat_id=3917;/GlobalBluePoint-ERP.aspx',
-    # 'https://www.marstech.com.ar/listado/st=Perifericos;g=0;b=1;or=5;c=3;e=6;h=1;m=172,199,293,179,180,173,209,235,277,178;A_PAGENUMBER=1;cat_id=62;scat_id=3894;/GlobalBluePoint-ERP.aspx',
-    # 'https://www.marstech.com.ar/listado/st=Estabilizadores%20Y%20Ups;g=0;b=1;or=5;c=3;e=6;h=1;m=0;A_PAGENUMBER=1;cat_id=46;scat_id=3832;/GlobalBluePoint-ERP.aspx']
+    # 'https://www.marstech.com.ar/listado/st=Perifericos;g=0;b=1;or=5;c=3;e=6;h=1;m=0;A_PAGENUMBER=1;cat_id=62;scat_id=3892;/GlobalBluePoint-ERP.aspx']
+
+    start_urls = ['https://www.marstech.com.ar/listado/st=Perifericos;g=0;b=1;or=5;c=3;e=6;h=1;m=0;A_PAGENUMBER=1;cat_id=62;scat_id=3894;/GlobalBluePoint-ERP.aspx',
+    'https://www.marstech.com.ar/listado/st=Almacenamiento;g=0;b=1;or=5;c=3;e=6;h=1;m=0;A_PAGENUMBER=1;cat_id=51;scat_id=3863;/GlobalBluePoint-ERP.aspx',
+    'https://www.marstech.com.ar/listado/st=Almacenamiento;g=0;b=1;or=5;c=3;e=6;h=1;m=0;A_PAGENUMBER=1;cat_id=51;scat_id=3864;/GlobalBluePoint-ERP.aspx',
+    'https://www.marstech.com.ar/listado/st=Parlantes;g=0;b=1;or=5;c=3;e=6;h=1;m=0;A_PAGENUMBER=1;cat_id=62;scat_id=3897;/GlobalBluePoint-ERP.aspx',
+    'https://www.marstech.com.ar/listado/st=Mouse;g=0;b=1;or=5;c=3;e=6;h=1;m=0;A_PAGENUMBER=1;cat_id=62;scat_id=3893;/GlobalBluePoint-ERP.aspx',
+    'https://www.marstech.com.ar/listado/st=Perifericos;g=0;b=1;or=5;c=3;e=6;h=1;m=0;A_PAGENUMBER=1;cat_id=62;scat_id=3892;/GlobalBluePoint-ERP.aspx',
+    'https://www.marstech.com.ar/listado/st=Perifericos;g=0;b=1;or=5;c=3;e=6;h=1;m=0;A_PAGENUMBER=1;cat_id=62;scat_id=3895;/GlobalBluePoint-ERP.aspx',
+    'https://www.marstech.com.ar/listado/st=Almacenamiento;g=0;b=1;or=5;c=3;e=6;h=1;m=0;A_PAGENUMBER=1;cat_id=51;scat_id=3865;/GlobalBluePoint-ERP.aspx',
+    'https://www.marstech.com.ar/listado/st=Monitores%20y%20Proyectores;g=0;b=1;or=5;c=3;e=6;h=1;m=0;A_PAGENUMBER=1;cat_id=60;scat_id=3917;/GlobalBluePoint-ERP.aspx',
+    'https://www.marstech.com.ar/listado/st=Perifericos;g=0;b=1;or=5;c=3;e=6;h=1;m=172,199,293,179,180,173,209,235,277,178;A_PAGENUMBER=1;cat_id=62;scat_id=3894;/GlobalBluePoint-ERP.aspx',
+    'https://www.marstech.com.ar/listado/st=Estabilizadores%20Y%20Ups;g=0;b=1;or=5;c=3;e=6;h=1;m=0;A_PAGENUMBER=1;cat_id=46;scat_id=3832;/GlobalBluePoint-ERP.aspx']
 
     def parse(self, response):
         sel = Selector(response)
