@@ -49,7 +49,7 @@ class StarComputacionSpider(Spider):
             elif cat == "impresoras-24":
                 loader.add_value('categoria', 'Impresoras')
             elif cat == "mouses-y-pads-41":
-                loader.add_value('categoria', 'Mouse Y Pads')
+                loader.add_value('categoria', 'Mouses')
             elif cat == "parlantes-42":
                 loader.add_value('categoria', 'Parlantes')
             elif cat == "webcams-46":
@@ -106,7 +106,7 @@ class BigPointSpider(Spider):
             elif cat == "placas-de-video":
                 loader.add_value('categoria', 'Placas de Video')
             elif cat == "mouses-y-teclados":
-                loader.add_value('categoria', 'Pack Mouses Y Teclados')
+                loader.add_value('categoria', 'Mouses Y Teclados')
             elif cat == "fuentes":
                 loader.add_value('categoria', 'Fuentes')
             elif cat == "gabinetes":
