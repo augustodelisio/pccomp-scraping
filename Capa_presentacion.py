@@ -11,7 +11,7 @@ def abrirFavoritos():
     venFavoritos.title("Favoritos")
     venFavoritos.resizable(0, 0)
     venFavoritos.positionfrom()
-    venFavoritos.geometry("850x550")
+    venFavoritos.geometry("850x350")
     venFavoritos.transient(root)
     venFavoritos.grab_set()
 
@@ -20,7 +20,7 @@ def abrirFavoritos():
     marcoListaFavoritos = Frame(venFavoritos)
     marcoListaFavoritos.pack()
     marcoListaFavoritos.pack(padx=15, pady=(30, 10))
-    listaFavoritos = ttk.Treeview(marcoListaFavoritos, height=20, columns=(0, 1, 2, 3, 4), show="headings")
+    listaFavoritos = ttk.Treeview(marcoListaFavoritos, height=11, columns=(0, 1, 2, 3, 4), show="headings")
     listaFavoritos.heading(0, text="ID", anchor=CENTER)
     listaFavoritos.heading(1, text="Categoria", anchor=CENTER)
     listaFavoritos.heading(2, text="Producto", anchor=CENTER)
@@ -43,26 +43,32 @@ def abrirFavoritos():
     ######## Creacion de botones de favoritos ########
     marcoBotonesFavoritos = Frame(venFavoritos)
     marcoBotonesFavoritos.pack(padx=12, pady=(10), anchor=CENTER)
+    lblCosto = Label(marcoBotonesFavoritos)
+    lblCosto.pack(side=RIGHT, anchor=W)
+    lblSubtotal = Label(marcoBotonesFavoritos, text="Subtotal:")
+    lblSubtotal.pack(padx=(200, 2), side=RIGHT, anchor=W)
     btnLink = Button(marcoBotonesFavoritos, text="Ver en la web", width=13, command=lambda: openweb(listaFavoritos.item(listaFavoritos.focus())['values'][4]))
     btnLink.pack(padx=4, side=LEFT, anchor=W)
-    btnFav = Button(marcoBotonesFavoritos, text="Borrar de favoritos", width=16, command=lambda: borrarFavorito(listaFavoritos, listaFavoritos.item(listaFavoritos.focus())['values'][0]))
+    btnFav = Button(marcoBotonesFavoritos, text="Borrar de favoritos", width=16, command=lambda: borrarFavorito(listaFavoritos, listaFavoritos.item(listaFavoritos.focus())['values'][0], marcoBotonesFavoritos, lblCosto))
     btnFav.pack(padx=4, side=LEFT, anchor=W)
 
 
     ######## Creacion de subtotal ########
-    lblSubtotal = Label(marcoBotonesFavoritos, text="Subtotal:")
-    lblSubtotal.pack(padx=(200, 2), side=LEFT, anchor=W)
+    
+    
+    actualizaSubtotal(listaFavoritos, marcoBotonesFavoritos, lblCosto)
+    
+
+def actualizaSubtotal(tv, marco, lbl):
     subtotal = StringVar()
     sumatoria = 0
-    for i in listaFavoritos.get_children():
+    for i in tv.get_children():
         try:
-            sumatoria += float(listaFavoritos.item(i)["values"][3])
+            sumatoria += float(tv.item(i)["values"][3])
         except:
             continue
     subtotal.set("{0:.2f}".format(sumatoria))
-    lblCosto = Label(marcoBotonesFavoritos, text="{}".format(subtotal.get()))
-    lblCosto.pack(side=RIGHT, anchor=W)
-
+    lbl["text"] = "{}".format(subtotal.get())
 
 def agregarFavorito(producto):
     if producto in favoritos:
@@ -71,11 +77,12 @@ def agregarFavorito(producto):
         favoritos.append(producto)
 
 
-def borrarFavorito(tv, id_producto):
+def borrarFavorito(tv, id_producto, marco, lbl):
     for i in favoritos:
         if i[0] == id_producto:
             favoritos.remove(i)
     actualizaLista(tv)
+    actualizaSubtotal(tv, marco, lbl)
 
 
 def actualizaLista(tv, opc=False):
