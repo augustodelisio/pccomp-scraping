@@ -130,11 +130,11 @@ def buscarProducto(opc, texto):
     actualizaLista(lista, True)
     if opc == "Categoria":
         for i in lista.get_children():
-            if texto in lista.item(i)["values"][1].lower():
+            if texto.lower() in lista.item(i)["values"][1].lower():
                 articulos_seleccionados.append(lista.item(i)["values"])
     else:
         for i in lista.get_children():
-            if texto in lista.item(i)["values"][2].lower():
+            if texto.lower() in lista.item(i)["values"][2].lower():
                 articulos_seleccionados.append(lista.item(i)["values"])
     for i in lista.get_children():
         lista.delete(i)
