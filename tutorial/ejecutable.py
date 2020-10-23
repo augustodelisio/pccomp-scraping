@@ -1,7 +1,9 @@
 
 from scrapy.crawler import CrawlerProcess
 from scrapy.utils.project import get_project_settings
+from time import perf_counter
 
+t1 = perf_counter()
 process = CrawlerProcess(get_project_settings())
 
 # 'followall' is the name of one of the spiders of the project.
@@ -10,5 +12,5 @@ process.crawl('BigPoint')
 process.crawl('Comeros')
 process.crawl('Marstech')
 process.start()# the script will block here until the crawling is finished
-
+print("Tiempo CON multiprocesamiento", perf_counter() - t1)
 
