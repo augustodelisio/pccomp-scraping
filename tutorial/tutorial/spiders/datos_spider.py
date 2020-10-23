@@ -15,7 +15,10 @@ from subprocess import call, run, Popen
 class StarComputacionSpider(Spider):
     name = "StarComputacion"
     start_urls = ['http://www.starcomputacion.com.ar/monitores-23/', 'http://www.starcomputacion.com.ar/teclados-45/',
-                 'http://www.starcomputacion.com.ar/discos-rigidos-67/']
+                  'http://www.starcomputacion.com.ar/impresoras-24/', 'http://www.starcomputacion.com.ar/mouses-y-pads-41/',
+                  'http://www.starcomputacion.com.ar/parlantes-42/', 'http://www.starcomputacion.com.ar/webcams-46/',
+                  'http://www.starcomputacion.com.ar/estabilizador-de-tension-39/', 'http://www.starcomputacion.com.ar/pendrives-13/',
+                  'http://www.starcomputacion.com.ar/auriculares-gamers-141/']
 
     def parse(self, response):
         sel = Selector(response)
@@ -49,8 +52,6 @@ class StarComputacionSpider(Spider):
                 loader.add_value('categoria', 'Mouse Y Pads')
             elif cat == "parlantes-42":
                 loader.add_value('categoria', 'Parlantes')
-            elif cat == "teclados-45":
-                loader.add_value('categoria', 'Teclados')
             elif cat == "webcams-46":
                 loader.add_value('categoria', 'Webcams')
             elif cat == "estabilizador-de-tension-39":
@@ -65,7 +66,11 @@ class BigPointSpider(Spider):
     name = "BigPoint"
     start_urls = ['https://bigpoint.com.ar/procesadores/', 'https://bigpoint.com.ar/motherboards/',
                   'https://bigpoint.com.ar/memorias/', 'https://bigpoint.com.ar/almacenamiento/',
-                  'https://bigpoint.com.ar/impresoras/']
+                  'https://bigpoint.com.ar/impresoras/', 'https://bigpoint.com.ar/placas-de-video/',
+                  'https://bigpoint.com.ar/mouses-y-teclados/', 'https://bigpoint.com.ar/fuentes/',
+                  'https://bigpoint.com.ar/gabinetes/', 'https://bigpoint.com.ar/monitores/',
+                  'https://bigpoint.com.ar/webcams/', 'https://bigpoint.com.ar/auriculares/',
+                  'https://bigpoint.com.ar/parlantes-pc/', 'https://bigpoint.com.ar/refrigeracion/']
 
     def parse(self, response):
         sel = Selector(response)
@@ -76,7 +81,6 @@ class BigPointSpider(Spider):
             loader = ItemLoader(item=Articulo(), selector=art)
 
             loader.add_xpath('nombre', './/div/div/div[1]/a/h2/text()')
-            #loader.add_xpath('precio', './/div/div/div[3]/div[1]/span/span/ins/span/text()')
             pre = loader.get_xpath('.//div/div/div[3]/div[1]/span/span/ins/span/text()')[0]
             pre = pre.split(',')
             precio = ""
@@ -139,7 +143,6 @@ class ComerosSpider(Spider):
             if nom == "Listado de sucursales OCA para retiro del producto":
                 break
 
-            #loader.add_xpath('nombre', './/div/div[3]/h3/text()')
             loader.add_value('nombre', nom)
             loader.add_xpath('precio', './/div/div[2]/p/span/text()')
 
