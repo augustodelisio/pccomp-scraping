@@ -32,7 +32,10 @@ class GuardarArticulosPipeline(object):
         session = self.Session()
         articulo = Articulo()
         articulo.nombre = capwords(item["nombre"][0])
-        articulo.precio = item["precio"][0]
+        if item["precio"][0].lower() == "consultar":
+            articulo.precio = "0"
+        else:
+            articulo.precio = item["precio"][0]
         articulo.url = item["url"][0]
         articulo.categoria = item["categoria"][0]
 

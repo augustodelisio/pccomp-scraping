@@ -251,3 +251,78 @@ class MarstechSpider(Spider):
             yield loader.load_item()#imprimir salida
 
 
+class FoxComputacionSpider(Spider):
+    name = "FoxComputacion"
+    start_urls = ['https://www.foxinsumospc.com.ar/?p=home&m=productos&cat=45',
+                  'https://www.foxinsumospc.com.ar/?p=home&m=productos&cat=60',
+                  'https://www.foxinsumospc.com.ar/?p=home&m=productos&cat=30',
+                  'https://www.foxinsumospc.com.ar/?p=home&m=productos&cat=31',
+                  'https://www.foxinsumospc.com.ar/?p=home&m=productos&cat=32',
+                  'https://www.foxinsumospc.com.ar/?p=home&m=productos&cat=50',
+                  'https://www.foxinsumospc.com.ar/?p=home&m=productos&cat=51',
+                  'https://www.foxinsumospc.com.ar/?p=home&m=productos&cat=69',
+                  'https://www.foxinsumospc.com.ar/?p=home&m=productos&cat=23',
+                  'https://www.foxinsumospc.com.ar/?p=home&m=productos&cat=24',
+                  'https://www.foxinsumospc.com.ar/?p=home&m=productos&cat=25',
+                  'https://www.foxinsumospc.com.ar/?p=home&m=productos&cat=62',
+                  'https://www.foxinsumospc.com.ar/?p=home&m=productos&cat=76',
+                  'https://www.foxinsumospc.com.ar/?p=home&m=productos&cat=42',
+                  'https://www.foxinsumospc.com.ar/?p=home&m=productos&cat=11',
+                  'https://www.foxinsumospc.com.ar/?p=home&m=productos&cat=56',
+                  'https://www.foxinsumospc.com.ar/?p=home&m=productos&cat=61',
+                  'https://www.foxinsumospc.com.ar/?p=home&m=productos&cat=59',
+                  'https://www.foxinsumospc.com.ar/?p=home&m=productos&cat=105']
+
+    def parse(self, response):
+        sel = Selector(response)
+        articulos = sel.xpath('//*[@id="tt-pageContent"]/div/div/div/div[2]/div/div[2]/div')
+
+        #ITERAR SOBRE TODOS LOS ARTICULOS
+        for i, art in enumerate(articulos):
+            loader = ItemLoader(item=Articulo(), selector=art)
+
+            loader.add_xpath('nombre', './/div/div[2]/h2/a/text()')
+
+            precio = loader.get_xpath('.//div/div[2]/div[2]/text()')[0]
+            precio = precio.split('$')[1].split('.')
+            pre = precio[0] + precio[1]
+            loader.add_value('precio', pre)
+
+            finalUrl = loader.get_xpath('.//div/div[2]/h2/a/@href')[0]
+            finalUrl = finalUrl.split('id=')[-1]
+            fullUrl = 'https://www.foxinsumospc.com.ar/?p=home&m=detalleproducto&id=' + finalUrl[0]
+            loader.add_value('url', fullUrl)
+
+            cat = response.url.split('cat=')[-1]
+            if cat == "45":
+                loader.add_value('categoria', 'Gabinetes')
+            elif cat == "60":
+                loader.add_value('categoria', 'Monitores')
+            elif cat == "30" or cat == "31" or cat == "32":
+                loader.add_value('categoria', 'Almacenamiento')
+            elif cat == "50":
+                loader.add_value('categoria', 'Impresoras')
+            elif cat == "51":
+                loader.add_value('categoria', 'Joysticks')
+            elif cat == "69":
+                loader.add_value('categoria', 'Parlantes')
+            elif cat == "23" or cat == "24" or cat == "25":
+                loader.add_value('categoria', 'Refrigeración')
+            elif cat == "62":
+                loader.add_value('categoria', 'Mouses')
+            elif cat == "76":
+                loader.add_value('categoria', 'Placas de Video')
+            elif cat == "42":
+                loader.add_value('categoria', 'Fuentes')
+            elif cat == "11":
+                loader.add_value('categoria', 'Cables')
+            elif cat == "56":
+                loader.add_value('categoria', 'Memorias')
+            elif cat == "61":
+                loader.add_value('categoria', 'Motherboards')
+            elif cat == "59":
+                loader.add_value('categoria', 'Procesadores')
+            elif cat == "105":
+                loader.add_value('categoria', 'Webcams')
+            yield loader.load_item()#imprimir salida
+
