@@ -1,4 +1,4 @@
-from tutorial.tutorial.entidades import Articulo, Categoria, TablaArticulo
+from tutorial.tutorial.entidades import Articulo, Categoria
 from tutorial.Capa_datos import ArticulosData
 
 class ArticulosBusiness(object):

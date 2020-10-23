@@ -42,3 +42,4 @@ class Categoria(Base):
     id = Column(Integer, primary_key=True)
     nombre = Column('nombre', String(50))
     articulos = relationship('Articulo', backref='categorias')  # Una categoria tiene muchos articulos (1 a M)
+

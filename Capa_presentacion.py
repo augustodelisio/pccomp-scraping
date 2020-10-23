@@ -53,7 +53,7 @@ def abrirFavoritos():
     lblSubtotal.pack(padx=(200, 2), side=RIGHT, anchor=W)
     btnLink = Button(marcoBotonesFavoritos, text="Ver en la web", width=13, command=lambda: openweb(listaFavoritos.item(listaFavoritos.focus())['values'][4]))
     btnLink.pack(padx=4, side=LEFT, anchor=W)
-    btnFav = Button(marcoBotonesFavoritos, text="Borrar de favoritos", width=16, command=lambda: borrarFavorito(listaFavoritos, listaFavoritos.item(listaFavoritos.focus())['values'][0], marcoBotonesFavoritos, lblCosto))
+    btnFav = Button(marcoBotonesFavoritos, text="Quitar artículo", width=16, command=lambda: borrarFavorito(listaFavoritos, listaFavoritos.item(listaFavoritos.focus())['values'][0], marcoBotonesFavoritos, lblCosto))
     btnFav.pack(padx=4, side=LEFT, anchor=W)
 
 

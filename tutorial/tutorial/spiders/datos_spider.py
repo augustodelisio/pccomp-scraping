@@ -290,7 +290,7 @@ class FoxComputacionSpider(Spider):
 
             finalUrl = loader.get_xpath('.//div/div[2]/h2/a/@href')[0]
             finalUrl = finalUrl.split('id=')[-1]
-            fullUrl = 'https://www.foxinsumospc.com.ar/?p=home&m=detalleproducto&id=' + finalUrl[0]
+            fullUrl = 'https://www.foxinsumospc.com.ar/?p=home&m=detalleproducto&id=' + finalUrl
             loader.add_value('url', fullUrl)
 
             cat = response.url.split('cat=')[-1]
